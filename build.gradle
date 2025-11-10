@@ -42,18 +42,21 @@ configurations {
 
 repositories {
     mavenCentral()
-	maven {
-            url "https://repo.jenkins-ci.org/releases/"
-        }
+    maven {
+        url "https://repo.jenkins-ci.org/releases/"
+    }
+    maven {
+        url "https://public.dhe.ibm.com/software/products/UrbanCode/maven2/"
+    }
 }
 
 dependencies {
     //compile files('ext-lib/jenkins-cli.jar')
     // groovy-plugin-utils pulls down groovy-all as a transitive dependency for the 'compile' configuration
-    implementation group: 'com.ibm.urbancode.plugins', name: 'groovy-plugin-utils', version: '1.0'
+    implementation 'com.ibm.urbancode.plugins:groovy-plugin-utils:+'
     // https://mvnrepository.com/artifact/org.jenkins-ci.main/cli
     implementation group: 'org.jenkins-ci.main', name: 'cli', version: '1.651.3'
-
+    implementation 'com.ibm.urbancode.util:i18n-scraper:+'
     // This compiles the i18n-scraper script
     implementation localGroovy()
     // compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.6'
@@ -67,26 +70,81 @@ configurations {
 sourceSets {
     main {
         groovy {
-            srcDirs = ['src/main/groovy', 'src/main/zip', 'src/main/util']
+            srcDirs = ['src/main/groovy', 'src/main/zip', "${buildDir}/util"]
+        }
+    }
+    zip {
+        groovy {
+            srcDirs = ['src/main/zip']
+        }
+    }
+    classes {
+        groovy {
+            srcDirs = ['src/main/groovy', "${buildDir}/util"]
         }
     }
 }
 
+compileJava {
+    dependsOn 'extractGPU', 'copyi18n', 'copyDeps'
+}
+compileGroovy {
+    include "i18n-scraper.groovy"
+}
 task copyDeps(type: Copy) {
-    from configurations.runtimeClasspath
     into 'lib'
+    copy {
+        from configurations.runtimeClasspath
+        include { target ->
+            return target.file.path.contains("com.ibm.urbancode")
+        }
+        into 'lib'
+        rename { fileName ->
+            stripVersion(fileName)
+        }
+    }
+    copy {
+        from configurations.runtimeClasspath
+        exclude { target ->
+            return target.file.path.contains("com.ibm.urbancode")
+        }
+        into 'lib'
+    }
 }
 
+tasks.register('extractGPU', Copy) {
+    def zipFile = file('lib/groovy-plugin-utils.jar')
+    def outputDir = file("${buildDir}/util")
+
+    from zipTree(zipFile)
+    into outputDir
+}
+
+tasks.register('copyi18n', Copy) {
+    def i18nFile = file('lib/i18n-scraper.groovy')
+    def outputDir = file("${buildDir}/util")
+
+    from i18nFile
+    into outputDir
+}
 task distPlugin(type: Zip, dependsOn: ['compileGroovy', 'gatherI18n']) {
     def releaseVersion = apiVersion + "." + pluginVersion
-    from(sourceSets.main.groovy.srcDirs) {
+    from(sourceSets.zip.groovy.srcDirs) {
         filter(ReplaceTokens, tokens: [API_VERSION: apiVersion, RELEASE_VERSION: releaseVersion])
     }
     into('lib') {
         from copyDeps
+        exclude 'i18n-scraper.groovy'
+        exclude 'groovy-plugin-utils.jar'
+        exclude 'groovy-all-*.jar'
+        exclude 'gson-*.jar'
     }
     into('locale') {
         from buildLocaleDir
+    }
+    into('classes') {
+        from sourceSets.classes.groovy.srcDirs
+        exclude 'META-INF', 'i18n-scraper.groovy'
     }
     archiveFileName = "${pluginName}-${releaseVersion}.zip"
 }
@@ -95,9 +153,23 @@ task gatherI18n(type: JavaExec) {
     delete buildLocaleDir
     mkdir buildLocaleDir
 
-	mainClass.set('i18n-scraper')
+    mainClass.set('i18n-scraper')
     args 'build/locale/en.properties'
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task cleanAll(dependsOn: ['clean', 'cleanCopyDeps', 'cleanDistPlugin', 'cleanGatherI18n'])
+tasks.named("extractGPU") {
+    dependsOn("copyDeps")
+}
+
+tasks.named("copyi18n") {
+    dependsOn("copyDeps")
+}
+
+static String stripVersion(fileNameWithVersion) {
+    String ext = fileNameWithVersion.substring(fileNameWithVersion.lastIndexOf("."), fileNameWithVersion.length())
+    int end = fileNameWithVersion.lastIndexOf("-")
+    //assumes that: name-version.ext. Will not work with name-version-SNAPSHOT.ext
+    return fileNameWithVersion.substring(0, end) + ext
+}
