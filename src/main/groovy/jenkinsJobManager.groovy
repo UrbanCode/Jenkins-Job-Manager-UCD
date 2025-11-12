@@ -20,16 +20,6 @@ boolean waitUntilStart = props['waitUntilStart'];
 boolean WaitUntilCompletion = props['WaitUntilCompletion'];
 boolean printJobOutput = props['printJobOutput'];
 
-println ' Data: action: ' + action
-println ' Data: jobName: ' + jobName
-println ' Data: jenkinsURL: ' + jenkinsURL
-println ' Data: userName: ' + userName
-println ' Data: userPassword: ' + userPassword
-println ' Data: checkSCMChanges: ' + checkSCMChanges
-println ' Data: waitUntilStart: ' + waitUntilStart
-println ' Data: WaitUntilCompletion: ' + WaitUntilCompletion
-println ' Data: printJobOutput: ' + printJobOutput
-
 switch (action){
 	case "start":
 		startJob(jenkinsURL,userName,userPassword,jobName,checkSCMChanges,waitUntilStart,WaitUntilCompletion,printJobOutput)
