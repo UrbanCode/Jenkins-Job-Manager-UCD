@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 import com.urbancode.air.plugin.helpers.NewAirPluginTool
-
+import hudson.cli.CLI
 /*
 * Developer: Vikrant Singh
 * Email: virkantsnirban@hotmail.com
