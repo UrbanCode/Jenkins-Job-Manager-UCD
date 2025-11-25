@@ -1,14 +1,13 @@
 #!/usr/bin/env groovy
+import com.urbancode.air.plugin.helpers.NewAirPluginTool
+import hudson.cli.CLI
 /*
 * Developer: Vikrant Singh
 * Email: virkantsnirban@hotmail.com
 * Email: vikrantsnirban@irissoftware.com
 */
-import hudson.cli.CLI
-import com.urbancode.air.AirPluginTool;
 
-
-def apTool = new AirPluginTool(this.args[0], this.args[1]);
+def apTool = new NewAirPluginTool(this.args[0], this.args[1]);
 def props = apTool.getStepProperties();
 
 def jobName = props['jobName'];

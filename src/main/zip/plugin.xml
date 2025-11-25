@@ -73,8 +73,8 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
-      <arg file="jenkinsJobManager.groovy"/>
+      <arg path=".:classes:lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
+      <arg file="classes/jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
     </command>
@@ -120,8 +120,8 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
-      <arg file="jenkinsJobManager.groovy"/>
+      <arg path=".:classes:lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
+      <arg file="classes/jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
     </command>
@@ -167,8 +167,8 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
-      <arg file="jenkinsJobManager.groovy"/>
+      <arg path=".:classes:lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
+      <arg file="classes/jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
     </command>
@@ -214,8 +214,8 @@ Email: vikrantsnirban@irisoftware.com
      ]]></post-processing>
     <command program="${GROOVY_HOME}/bin/groovy">
       <arg value="-cp"/>
-      <arg path="lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
-      <arg file="jenkinsJobManager.groovy"/>
+      <arg path=".:classes:lib/groovy-plugin-utils-1.0.jar:lib/cli-1.651.3.jar:lib/remoting-2.59.jar:lib/trilead-ssh2-build214-jenkins-1.jar:lib/commons-codec-1.4.jar"/>
+      <arg file="classes/jenkinsJobManager.groovy"/>
       <arg file="${PLUGIN_INPUT_PROPS}"/>
       <arg file="${PLUGIN_OUTPUT_PROPS}"/>
     </command>
